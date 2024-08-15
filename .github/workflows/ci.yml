@@ -36,5 +36,5 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag my-express-app:latest ${{ secrets.DOCKER_USERNAME}}//my-app:latest
+          docker tag my-express-app:latest ${{ secrets.DOCKER_USERNAME}}//my-express-app:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/my-express-app:latest
