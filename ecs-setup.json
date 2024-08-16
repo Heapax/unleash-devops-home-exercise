@@ -1,0 +1,116 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "ESC Cluster and Service setup across multiple AZs",
+    "Parameters": {
+        "VpcId": {
+            "Type": "AWS::EC2::VPC::Id",
+            "Description": "The VPC ID"
+        },
+        "SubnetIds": {
+            "Type": "List<AWS::EC2::Subnet::Id>",
+            "Description": "The subnets to deploy the service in"
+        },
+        "SecurityGroupId": {
+            "Type": "AWS::EC2::SecurityGroup::Id",
+            "Description": "The security group for the ECS service"
+        }
+    },
+    "Resources": {
+        "MyECSCluster": {
+            "Type": "AWS::ECS::Cluster",
+            "Properties": {
+                "ClusterName": "my-cluster"
+            }
+        },
+        "MyECSTaskDefinition": {
+            "Type": "AWS::ECS::TaskDefinition",
+            "Properties": {
+                "Family": "my-task-family",
+                "NetworkMode": "awsvpc",
+                "RequiresCompatibilities": [
+                    "FARGATE"
+                ],
+                "Cpu": "256",
+                "Memory": "512",
+                "ContainerDefinitions": [
+                    {
+                        "Name": "my-container",
+                        "Image": {
+                            "Fn::Sub": "${DockerHubRepository}/my-express-app:latest"
+                        },
+                        "PortMappings": [
+                            {
+                                "ContainerPort": 3000
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "MyECSService": {
+            "Type": "AWS::ECS::Service",
+            "Properties": {
+                "Cluster": {
+                    "Ref": "MyECSCluster"
+                },
+                "DesiredCount": 1,
+                "LaunchType": "FARGATE",
+                "TaskDefinition": {
+                    "Ref": "MyECSTaskDefinition"
+                },
+                "NetworkConfiguration": {
+                    "AwsvpcConfiguration": {
+                        "Subnets": {       
+                             "Ref": "SubnetIds"  
+                        },
+                        "AssignPublicIp": "ENABLED"
+                    }
+                },
+                "LoadBalancers": [
+                    {
+                        "ContainerName": "my-container",
+                        "ContainerPort": 3000,
+                        "TargetGroupArn": {
+                            "Ref": "MyTargetGroup"
+                        }
+                    }
+                ]
+            }
+        },
+        "MyLoadBalancer": {
+            "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+            "Properties": {
+                "Name": "my-load-balancer",
+                "Subnets": {
+                    "Ref": "SubnetIds"
+                },
+                "SecurityGroups": [
+                    {
+                        "Ref": "SecurityGroupId"
+                    }
+                ]
+            }
+        },
+        "MyTargetGroup": {
+            "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+            "Properties": {
+                "Port": 3000,
+                "Protocol": "HTTP",
+                "VpcId": {
+                    "Ref": "VpcId"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "LoadBalancerDNSName": {
+            "Description": "DNS name for the load balancer",
+            "Value": {
+                "Fn::GetAtt": [
+                    "MyLoadBalancer",
+                    "DNSName"
+                ]
+            }
+        }
+    }
+}
