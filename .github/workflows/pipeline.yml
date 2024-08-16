@@ -54,11 +54,4 @@ jobs:
 
       - name: Deploy CloudFormation Stack
         run: |
-          aws cloudformation deploy \
-            --stack-name ecs-express-webapp-stack \
-            --template-file ecs-setup.json \
-            --parameters ParameterKey=VpcId,ParameterValue=${{ secrets.VPC_ID }} \
-                ParameterKey=SubnetIds,ParameterValue=${{ secrets.SUBNET_IDS }} \
-                ParameterKey=SecurityGroupId,ParameterValue=${{ secrets.SECURITY_GROUP_ID }} \
-                ParameterKey=DockerHubRepository,ParameterValue=${{ secrets.DOCKER_REPOSITORY }} \
-            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+          aws cloudformation deploy --stack-name my-ecs-stack --template-file ecs-setup.yaml --capabilities CAPABILITY_IAM --region ${{ secrets.AWS_REGION }}
