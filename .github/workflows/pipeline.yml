@@ -56,7 +56,7 @@ jobs:
         run: |
           aws cloudformation deploy \
             --stack-name ecs-express-webapp-stack \
-            --template-file template.json \
+            --template-file ecs-setup.json \
             --parameter-overrides \
               VpcId=${{ secrets.VPC_ID }} \
               SubnetIds=${{ secrets.SUBNET_IDS }} \
