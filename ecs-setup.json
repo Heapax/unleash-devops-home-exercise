@@ -13,7 +13,7 @@
         "SecurityGroupId": {
             "Type": "AWS::EC2::SecurityGroup::Id",
             "Description": "The security group for the ECS service"
-        }
+        },
         "DockerHubRepository": {
             "Type": "string"
             "Description": "The DockerHub repository URL"
