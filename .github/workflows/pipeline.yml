@@ -54,4 +54,12 @@ jobs:
 
       - name: Deploy CloudFormation Stack
         run: |
-          aws cloudformation deploy --stack-name my-ecs-stack --template-file ecs-setup.yaml --capabilities CAPABILITY_IAM --region ${{ secrets.AWS_REGION }}
+          aws cloudformation deploy \
+          --stack-name my-stack-name \
+          --template-file ./ecs-setup.json \
+          --parameter-overrides \
+            DockerHubRepository=${{ secrets.DOCKER_REPOSITORY }} \
+            VpcId=${{ secrets.VPC_ID }} \
+            SubnetIds=${{ secrets.SUBNET_IDS }} \
+            SecurityGroupId=${{ secrets.SECURITY_GROUP_ID }} \
+          --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
