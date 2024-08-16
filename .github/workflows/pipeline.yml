@@ -55,7 +55,7 @@ jobs:
       - name: Deploy CloudFormation Stack
         run: |
           aws cloudformation deploy \
-          --stack-name my-stack-name \
+          --stack-name ecs-webapp-stack \
           --template-file ./ecs-setup.json \
           --parameter-overrides \
             DockerHubRepository=${{ secrets.DOCKER_REPOSITORY }} \
