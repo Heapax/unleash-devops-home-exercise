@@ -55,6 +55,11 @@ jobs:
       - name: Deploy CloudFormation Stack
         run: |
           aws cloudformation deploy \
-            --stack-name ecs-webapp-deployment \
-            --parameter-overrides DockerHubRepository=${{ secrets.DockerHubRepository }} \
-            --capabilities CAPABILITY_NAMED_IAM
+          --stack-name ecs-express-webapp-stack \
+          --template-file ./ecs-setup.json \
+          --parameter-overrides \
+            DockerHubRepository=${{ secrets.DOCKER_REPOSITORY }} \
+            VpcId=${{ secrets.VPC_ID }} \
+            SubnetIds=${{ secrets.SUBNET_IDS }} \
+            SecurityGroupId=${{ secrets.SECURITY_GROUP_ID }} \
+          --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
