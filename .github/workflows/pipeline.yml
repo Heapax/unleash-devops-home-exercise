@@ -57,9 +57,8 @@ jobs:
           aws cloudformation deploy \
             --stack-name ecs-express-webapp-stack \
             --template-file ecs-setup.json \
-            --parameter-overrides \
-              VpcId=${{ secrets.VPC_ID }} \
-              SubnetIds=${{ secrets.SUBNET_IDS }} \
-              SecurityGroupId=${{ secrets.SECURITY_GROUP_ID }} \
-              DockerHubRepository=${{ secrets.DOCKER_REPOSITORY }} \
+            --parameters ParameterKey=VpcId,ParameterValue=${{ secrets.VPC_ID }} \
+                ParameterKey=SubnetIds,ParameterValue=${{ secrets.SUBNET_IDS }} \
+                ParameterKey=SecurityGroupId,ParameterValue=${{ secrets.SECURITY_GROUP_ID }} \
+                ParameterKey=DockerHubRepository,ParameterValue=${{ secrets.DOCKER_REPOSITORY }} \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
