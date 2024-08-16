@@ -15,7 +15,7 @@
             "Description": "The security group for the ECS service"
         },
         "DockerHubRepository": {
-            "Type": "string",
+            "Type": "String",
             "Description": "The DockerHub repository URL"
         }
     },
