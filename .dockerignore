@@ -1,6 +1,7 @@
 node_modules
 dist/
 iac/
+.github/
 .git
 .gitignore
 dockerfile
