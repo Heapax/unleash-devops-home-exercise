@@ -1,0 +1,71 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "VPC and Subnet setup across multiple AZs",
+	"Resources": {
+		"MyVPC": {
+			"Type": "AWS::EC2::VPC",
+			"Properties": {
+				"CidrBlock": "10.0.0.0/16",
+				"EnableDnsSupport": true,
+				"EnableDnsHostnames": true,
+				"Tags": [
+					{
+						"Key": "Name",
+						"Value": "MyVPC"
+					}
+				]
+			}
+		},
+		"MySubnetA": {
+			"Type": "AWS::EC2::Subnet",
+			"Properties": {
+				"VpcId": {
+					"Ref": "MyVPC"
+				},
+				"CidrBlock": "10.0.1.0/24",
+				"AvailabilityZone": "eu-north-1a",
+				"MapPublicIpOnLaunch": true,
+				"Tags": [
+					{
+						"Key": "Name",
+						"Value": "MySubnetA"
+					}
+				]
+			}
+		},
+		"MySubnetB": {
+			"Type": "AWS::EC2::Subnet",
+			"Properties": {
+				"VpcId": {
+					"Ref": "MyVPC"
+				},
+				"CidrBlock": "10.0.2.0/24",
+				"AvailabilityZone": "eu-north-1b",
+				"MapPublicIpOnLaunch": true,
+				"Tags": [
+					{
+						"Key": "Name",
+						"Value": "MySubnetB"
+					}
+				]
+			}
+		},
+		"MySubnetC": {
+			"Type": "AWS::EC2::Subnet",
+			"Properties": {
+				"VpcId": {
+					"Ref": "MyVPC"
+				},
+				"CidrBlock": "10.0.3.0/24",
+				"AvailabilityZone": "eu-north-1c",
+				"MapPublicIpOnLaunch": true,
+				"Tags": [
+					{
+						"Key": "Name",
+						"Value": "MySubnetC"
+					}
+				]
+			}
+		}
+	}
+}
